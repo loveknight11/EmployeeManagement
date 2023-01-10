@@ -1,14 +1,12 @@
 ﻿@model Employee
 
-<div>
-    Name : @Model.Name
-</div>
-<div>
-    Department : @Model.Department
-</div>
-<div>
-    Email : @Model.Email
-</div>
-<div>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back</a>
-</div>
+
+<div class="row">
+    <div class="card col-3 ">
+        <div class="card-header"><h3>Name : @Model.Name</h3></div>
+        <img class="card-img-top" src="~/Images/emp.jpg" />
+        <div class="card-text"><h6>Department : @Model.Department</h6></div>
+        <div class="card-text"><h6>Email : @Model.Email</h6></div>
+        <div class="card-footer"><a asp-controller="Home" asp-action="index" asp-route-id="@Model.Id" class="btn btn-info">Back</a></div>
+    </div>
+
