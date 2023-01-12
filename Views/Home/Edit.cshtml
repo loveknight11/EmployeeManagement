@@ -1,10 +1,13 @@
 ﻿@using EmployeeManagement.ViewModels.Home
-@model CreateViewModel
-@{ 
-    ViewBag.Title = "Create Employee";
+@model EditViewModel
+@{
+    ViewBag.Title = "Edit Employee";
+    var PhotoPath = "~/Images/" + (Model.PhotoPath ?? "emp.jpg");
 }
 
-<form enctype="multipart/form-data" asp-action="Create" asp-controller="Home" method="post" class=" p-2 mt-3 border border-1 border-primary">
+<form enctype="multipart/form-data" asp-action="edit" asp-controller="Home" method="post" class=" p-2 mt-3 border border-1 border-primary">
+    <input hidden asp-for="Id" />
+    <input hidden asp-for="PhotoPath" />
     <div class="row m-1">
         <label asp-for="Name" class="col-sm-2 col-form-label text-center"></label>
         <div class="col-sm-10">
@@ -29,14 +32,19 @@
             <span asp-validation-for="Department" class="text-danger"></span>
         </div>
     </div>
-    <div class="row m-1">
-        <label  asp-for="Photo" class="col-sm-2 col-form-label text-center"></label>
+    <div class="row m-1 input-group">
+        <label asp-for="Photo" class="col-sm-2 col-form-label text-center">Select New Photo</label>
         <div class="col-sm-10 ">
             <input asp-for="Photo" class="form-control" />
         </div>
     </div>
+    <div class="text-center">
+
+        <img src="@PhotoPath" asp-append-version="true" class="Img-Thumb" />
+    </div>
     <div asp-validation-summary="All" class="text-bg-danger"></div>
     <div class="text-center">
-        <button type="submit" class="btn btn-outline-primary ms-3 mt-3 ">Create</button>
+        <button type="submit" class="btn btn-primary ms-3 mt-3 ">Update</button>
+        <button type="submit" asp-action="index" asp-controller="home" class="btn btn-secondary ms-3 mt-3 ">Cancel</button>
     </div>
 </form>

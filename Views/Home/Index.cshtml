@@ -3,13 +3,16 @@
     @foreach (var emp in Model)
     {
         var image = "~/Images/" + (emp.PhotoPath ?? "emp.jpg");
-        <div class="card col-sm-3 p-2 m-2">
-            <div class="card-header"><h3>Name : @emp.Name</h3></div>
-            <img asp-append-version="true"  class="card-img-top Img-Thumb" src="@image"/>
-            <div class="card-text"><h6>Department : @emp.Department</h6></div>
-            <div class="card-text"><h6>Email : @emp.Email</h6></div>
-            <div class="card-footer"><a asp-controller="Home" asp-action="Details" asp-route-id="@emp.Id" class="btn btn-info">View</a></div>
+    <div class="card col-sm-3 p-2 m-2">
+        <div class="card-header"><h3>Name : @emp.Name</h3></div>
+        <img asp-append-version="true" class="card-img-top Img-Thumb" src="@image" />
+        <div class="card-text"><h6>Department : @emp.Department</h6></div>
+        <div class="card-text"><h6>Email : @emp.Email</h6></div>
+        <div class="card-footer card-group">
+            <div><a asp-controller="Home" asp-action="Details" asp-route-id="@emp.Id" class="btn btn-info me-1">View</a></div>
+            <div><a asp-controller="Home" asp-action="edit" asp-route-id="@emp.Id" class="btn btn-success">Edit</a></div>
         </div>
+    </div>
 
     }
 </div>
