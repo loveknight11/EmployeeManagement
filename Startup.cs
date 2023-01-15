@@ -39,6 +39,7 @@ namespace EmployeeManagement
             }
             else
             {
+                app.UseExceptionHandler("/Error");
                 app.UseStatusCodePagesWithReExecute("/error/{0}");
             }
 

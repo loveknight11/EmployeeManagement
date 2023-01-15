@@ -15,7 +15,7 @@ namespace EmployeeManagement.Controllers
             var statusCodeResult = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
             switch (statuscode)
             {
-                
+
                 case 404:
                     ViewBag.Error = "Can't find what you are asking for";
                     ViewBag.Qs = statusCodeResult.OriginalQueryString;
@@ -24,7 +24,15 @@ namespace EmployeeManagement.Controllers
                 default:
                     break;
             }
-            
+
+            return View("NotFound");
+        }
+
+        [Route("error")]
+        public IActionResult ExceptionHandler()
+        {
+            var ex = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            //log exception
             return View("NotFound");
         }
     }
