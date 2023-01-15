@@ -1,0 +1,8 @@
+﻿@model int
+
+    <div class="alert alert-danger">
+        <h2>Error 404 :</h2>
+        <hr />
+        <h4>Can't find employee with ID = @Model</h4>
+    </div>
+    <a asp-controller="Home" asp-action="index"  class="btn btn-info">Back</a>

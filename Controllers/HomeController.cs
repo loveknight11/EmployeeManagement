@@ -22,7 +22,12 @@ namespace EmployeeManagement.Controllers
         }
         public ViewResult Details(int id)
         {
-            return View(_employeeRepository.GetEmployee(id));
+            Employee employee = _employeeRepository.GetEmployee(id);
+            if (employee == null)
+            {
+                return View("EmployeeNotFound",id);
+            }
+            return View(employee);
         }
 
         public ViewResult Index()
