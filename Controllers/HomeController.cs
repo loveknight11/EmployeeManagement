@@ -22,7 +22,7 @@ namespace EmployeeManagement.Controllers
         }
         public ViewResult Details(int id)
         {
-            throw new Exception("Exception in details");
+            //throw new Exception("Exception in details");
             Employee employee = _employeeRepository.GetEmployee(id);
             if (employee == null)
             {
