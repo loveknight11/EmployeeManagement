@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<IdentityUser> signInManager;
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -45,13 +46,27 @@
                         <a asp-action="Create" asp-controller="Home" class="nav-link">Create</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item me-1">
+            </div>
+            <ul class="navbar-nav me-auto ms-auto">
+                @if (signInManager.IsSignedIn(User))
+                {
+                    <form method="post" asp-action="logout" asp-controller="account">
+                        <button type="submit" class="btn btn-link">Logout @User.Identity.Name</button>
+                    </form>
+                }
+                else
+                {
+                    <li class="nav-item">
                         <a asp-action="Register" asp-controller="Account" class="nav-link">Register</a>
                     </li>
-                </ul>
-            </div>
+                    <li class="nav-item">
+                        <a asp-action="sigin" asp-controller="Account" class="nav-link">Sign In</a>
+                    </li>
+                }
+
+            </ul>
         </nav>
+
         <div>
             @RenderBody()
         </div>
