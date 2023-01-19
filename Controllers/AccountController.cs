@@ -26,7 +26,7 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterAsync(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -59,6 +59,33 @@ namespace EmployeeManagement.Controllers
         {
             await signInManager.SignOutAsync();
             return RedirectToAction("index", "home");
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password,
+                    model.RememberMe, false);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("index", "home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid Password");
+                }
+
+
+            }
+            return View(model);
         }
     }
 }
