@@ -1,5 +1,6 @@
 ﻿using EmployeeManagement.Models;
 using EmployeeManagement.ViewModels.Home;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -31,6 +32,7 @@ namespace EmployeeManagement.Controllers
             return View(employee);
         }
 
+        [AllowAnonymous]
         public ViewResult Index()
         {
             return View(_employeeRepository.GetAllEmployees());

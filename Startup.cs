@@ -1,9 +1,11 @@
 using EmployeeManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +29,15 @@ namespace EmployeeManagement
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(_config.GetConnectionString("EmployeeDbConntection")));
-            services.AddMvc(o => o.EnableEndpointRouting = false);
+            services.AddMvc(o => 
+            { 
+                o.EnableEndpointRouting = false;
+                // to allow only authorized users to access any controller 
+                var policy = new AuthorizationPolicyBuilder()
+                                .RequireAuthenticatedUser()
+                                .Build();
+                o.Filters.Add(new AuthorizeFilter(policy));
+            });
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
