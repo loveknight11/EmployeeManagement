@@ -7,6 +7,8 @@
     <environment include="Development">
         <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
         <script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
         <script src="~/lib/bootstrap/js/bootstrap.js"></script>
         <link href="~/css/StyleSheet.css" rel="stylesheet" />
     </environment>
@@ -14,12 +16,13 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"
               asp-fallback-href="~/lib/bootstrap/css/bootstrap.min.css"
-        asp-fallback-test-class="e-control"
-        asp-fallback-test-property="font-size"
-        asp-fallback-test-value="12px"
-        asp-suppress-fallback-integrity="true"
-        >
-
+              asp-fallback-test-class="e-control"
+              asp-fallback-test-property="font-size"
+              asp-fallback-test-value="12px"
+              asp-suppress-fallback-integrity="true">
+        <script src="https://code.jquery.com/jquery-3.6.3.slim.min.js" integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
     </environment>
     
     <title>@ViewBag.Title</title>
