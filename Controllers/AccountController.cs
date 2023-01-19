@@ -33,16 +33,17 @@ namespace EmployeeManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                IdentityUser user = new IdentityUser { 
-                Email = model.Email,
-                UserName = model.Email
+                IdentityUser user = new IdentityUser
+                {
+                    Email = model.Email,
+                    UserName = model.Email
                 };
 
                 var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                   await signInManager.SignInAsync(user, false);
-                    return RedirectToAction( "index", "home");
+                    await signInManager.SignInAsync(user, false);
+                    return RedirectToAction("index", "home");
                 }
                 else
                 {
@@ -89,7 +90,7 @@ namespace EmployeeManagement.Controllers
                     {
                         return RedirectToAction("index", "home");
                     }
-                    
+
                 }
                 else
                 {
@@ -99,6 +100,21 @@ namespace EmployeeManagement.Controllers
 
             }
             return View(model);
+        }
+
+
+        [AllowAnonymous]
+        public async Task<IActionResult> IsEmailRegistered(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"Email {email} is already registered");
+            }
         }
     }
 }
