@@ -81,13 +81,13 @@ namespace EmployeeManagement.Controllers
                     model.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    if (string.IsNullOrEmpty(returnUrl))
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
-                        return RedirectToAction("index", "home");
+                        return Redirect(returnUrl);
                     }
                     else
                     {
-                        return Redirect(returnUrl);
+                        return RedirectToAction("index", "home");
                     }
                     
                 }
