@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EmployeeManagement.Utils;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +13,7 @@ namespace EmployeeManagement.ViewModels.Account
         [Required]
         [EmailAddress]
         [Remote(action: "IsEmailRegistered",controller: "Account")]
+        [AllowedEmailDomain(AllowedDomain:"gmail.com", ErrorMessage ="We only accept Gmail Accounts")]
         public string Email { get; set; }
 
         [Required]
