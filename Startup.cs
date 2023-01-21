@@ -39,7 +39,7 @@ namespace EmployeeManagement
                 o.Filters.Add(new AuthorizeFilter(policy));
             });
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 4;
