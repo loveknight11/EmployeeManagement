@@ -13,7 +13,7 @@
             <div class="card-header"><h5>@role.Id</h5></div>
             <div class="card-body"><h3>@role.Name</h3></div>
             <div class="card-footer">
-                <a class="btn btn-info" asp-controller="administration" asp-action="editrole">Edit</a>
+                <a class="btn btn-info" asp-controller="administration" asp-action="editrole" asp-route-id="@role.Id">Edit</a>
                 <a class="btn btn-danger" asp-controller="administration" asp-action="deleterole">Delete</a>
             </div>
         </div>
