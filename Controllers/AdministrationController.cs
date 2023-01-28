@@ -102,5 +102,53 @@ namespace EmployeeManagement.Controllers
                 
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditUsersInRole(string id)
+        {
+            var role = await roleManager.FindByIdAsync(id);
+            if (role == null)
+            {
+                ViewBag.Error = $"Role with Id = {id} is not found";
+                return View("NotFound");
+            }
+            var users = userManager.Users;
+            var usersInRole = await userManager.GetUsersInRoleAsync(role.Name);
+            List<RoleUsers> roleUsers = new List<RoleUsers>();
+            foreach (var user in users)
+            {
+                roleUsers.Add(new RoleUsers()
+                {
+                    Username   = user.UserName,
+                    UserId = user.Id,
+                    IsInRole = usersInRole.Contains(user)
+                }) ;
+            }
+            ViewBag.roleId = role.Id;
+            ViewBag.roleName = role.Name;
+            return View(roleUsers);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditUsersInRole(List<RoleUsers> roleUsers, string id)
+        {
+            var role = await roleManager.FindByIdAsync(id);
+            var usersInRole = await userManager.GetUsersInRoleAsync(role.Name);
+
+            foreach (var user in roleUsers)
+            {
+                var appUser = await userManager.FindByIdAsync(user.UserId);
+                IdentityResult result = new IdentityResult();
+                if (user.IsInRole && !usersInRole.Contains(appUser))
+                {
+                    
+                    result = await userManager.AddToRoleAsync(appUser, role.Name);
+                }
+                else if (!user.IsInRole && usersInRole.Contains(appUser))
+                {
+                    result = await userManager.RemoveFromRoleAsync(appUser, role.Name);
+                }
+            }
+            return RedirectToAction("EditRole", "administration", new { id = id});
+        }
     }
 }
