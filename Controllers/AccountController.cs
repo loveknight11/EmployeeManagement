@@ -118,5 +118,12 @@ namespace EmployeeManagement.Controllers
                 return Json($"Email {email} is already registered");
             }
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
