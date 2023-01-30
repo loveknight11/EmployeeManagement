@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ApplicationUser>
+
+@{
+    ViewBag.Title = "All Users";
+}
+
+<h1>All Users</h1>
+<a asp-action="Register" asp-controller="account" class="btn btn-primary">Add User</a>
+
+@if (Model.Any())
+{
+    @foreach (var user in Model)
+    {
+        <div class="card mt-2">
+            <div class="card-header">
+                <h3>Id : @user.Id</h3>
+            </div>
+            <div class="card-body">
+                <h2>Username : @user.UserName</h2>
+            </div>
+            <div class="card-footer">
+                <a asp-action="" asp-controller="" class="btn btn-primary">Edit</a>
+                <a asp-action="" asp-controller="" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            <h3>No Users</h3>
+        </div>
+        <div class="card-body">
+            <h4>Add Users From Below</h4>
+        </div>
+        <div class="card-footer">
+            <a asp-action="Register" asp-controller="account" class="btn btn-primary">Add User</a>
+        </div>
+    </div>
+}
