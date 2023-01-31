@@ -3,10 +3,6 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "library": "twitter-bootstrap@5.2.3",
-      "destination": "wwwroot/lib/bootstrap/"
-    },
-    {
       "library": "jquery@3.6.3",
       "destination": "wwwroot/lib/jquery/"
     },
@@ -17,6 +13,10 @@
     {
       "library": "jquery-validation-unobtrusive@4.0.0",
       "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
+    },
+    {
+      "library": "bootstrap@5.2.3",
+      "destination": "wwwroot/lib/bootstrap/"
     }
   ]
 }
