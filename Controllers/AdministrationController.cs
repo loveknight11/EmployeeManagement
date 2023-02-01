@@ -160,6 +160,31 @@ namespace EmployeeManagement.Controllers
             return View(users);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                ViewBag.Error = $"Can't find user with Id = {id}";
+                return View("NotFound");
+            }
+
+            var roles = await userManager.GetRolesAsync(user);
+            var claims = await userManager.GetClaimsAsync(user);
+
+            var model = new EditUserViewModel { 
+            City = user.City,
+            Email = user.Email,
+            Id = user.Id,
+            Username = user.UserName,
+            Claims = claims.Select(x => x.Value).ToList(),
+            Roles = roles.ToList()
+            };
+
+            return View(model);
+        }
+
 
     }
 }

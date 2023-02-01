@@ -19,7 +19,7 @@
                 <h2>Username : @user.UserName</h2>
             </div>
             <div class="card-footer">
-                <a asp-action="" asp-controller="" class="btn btn-primary">Edit</a>
+                <a asp-action="edituser" asp-controller="administration" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
                 <a asp-action="" asp-controller="" class="btn btn-danger">Delete</a>
             </div>
         </div>
