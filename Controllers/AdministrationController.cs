@@ -184,7 +184,7 @@ namespace EmployeeManagement.Controllers
 
             return View(model);
         }
-
+        [HttpPost]
         public async Task<IActionResult> DeleteUser(string Id)
         {
             var user = await userManager.FindByIdAsync(Id);
@@ -209,7 +209,33 @@ namespace EmployeeManagement.Controllers
             }
             return View("listusers");
         }
-        
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteRole(string Id)
+        {
+            var role = await roleManager.FindByIdAsync(Id);
+            if (role == null)
+            {
+                ViewBag.Error = $"Can't find role with Id = {Id}";
+                return View("NotFound");
+            }
+
+            var result = await roleManager.DeleteAsync(role);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("listroles", "administration");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            return View("listroles");
+        }
+
 
     }
 }
