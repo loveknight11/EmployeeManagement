@@ -31,4 +31,42 @@
 </form>
 
 @* Todo: show user roles in card *@
+<div class="card mt-2">
+    <div class="card-header"><h3>User Roles</h3></div>
+    <div class="card-body">
+        @if (Model.Roles.Any())
+        {
+            foreach (var role in Model.Roles)
+            {
+                <h4>@role</h4>
+            }
+        }
+        else
+        {
+            <h4>None At the moment</h4>
+        }
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-primary" href="#" >Manage Roles</a>
+    </div>
+</div>
 @* Todo: show user Claims in card *@
+<div class="card mt-2">
+    <div class="card-header"><h3>User Claims</h3></div>
+    <div class="card-body">
+        @if (Model.Claims.Any())
+        {
+            foreach (var claim in Model.Claims)
+            {
+                <h4>@claim</h4>
+            }
+        }
+        else
+        {
+            <h4>None At the moment</h4>
+        }
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-primary" href="#">Manage Claims</a>
+    </div>
+</div>
