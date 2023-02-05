@@ -3,6 +3,7 @@ using EmployeeManagement.ViewModels.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -219,21 +220,30 @@ namespace EmployeeManagement.Controllers
                 ViewBag.Error = $"Can't find role with Id = {Id}";
                 return View("NotFound");
             }
-
-            var result = await roleManager.DeleteAsync(role);
-
-            if (result.Succeeded)
+            try
             {
-                return RedirectToAction("listroles", "administration");
-            }
-            else
-            {
-                foreach (var error in result.Errors)
+                var result = await roleManager.DeleteAsync(role);
+
+                if (result.Succeeded)
                 {
-                    ModelState.AddModelError("", error.Description);
+                    return RedirectToAction("listroles", "administration");
                 }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+                return View("listroles");
             }
-            return View("listroles");
+            catch (DbUpdateException ex)
+            {
+                ViewBag.Title = $"{role.Name} is in use";
+                ViewBag.Message = $"You can't delete {role.Name} Role while it has users";
+                return View("NotFound");
+            }
+            
         }
 
 
