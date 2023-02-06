@@ -8,26 +8,29 @@
     ViewBag.Title = "All Roles";
 }
 <h1>List All Roles</h1>
-<a class="btn btn-primary mb-3" asp-controller="administration" asp-action="createrole">Create Role</a>
-@if (Model.Any())
+@if ((await authorizationService.AuthorizeAsync(User, "CreateRolePolicy")).Succeeded)
 {
-    foreach (var role in Model)
+    <a class="btn btn-primary mb-3" asp-controller="administration" asp-action="createrole">Create Role</a>
+}
+    @if (Model.Any())
     {
-        <div class="card mb-2">
-            <div class="card-header"><h5>@role.Id</h5></div>
-            <div class="card-body"><h3>@role.Name</h3></div>
-            <div class="card-footer">
-                <form asp-action="DeleteRole" asp-controller="administration" asp-route-id="@role.Id" method="post">
-                    @if ((await authorizationService.AuthorizeAsync(User, "EditRolePolicy")).Succeeded)
-                    {
-                        <a class="btn btn-info" asp-controller="administration" asp-action="editrole" asp-route-id="@role.Id">Edit</a>
-                    }
-                    @if ((await authorizationService.AuthorizeAsync(User, "DeleteRolePolicy")).Succeeded)
-                    {
-                        <span id="deleteSpan_@role.Id">
-                            <a href="#" class="btn btn-danger" onclick="ConfirmDelete('@role.Id',true)">Delete</a>
-                        </span>
-                    }
+        foreach (var role in Model)
+        {
+            <div class="card mb-2">
+                <div class="card-header"><h5>@role.Id</h5></div>
+                <div class="card-body"><h3>@role.Name</h3></div>
+                <div class="card-footer">
+                    <form asp-action="DeleteRole" asp-controller="administration" asp-route-id="@role.Id" method="post">
+                        @if ((await authorizationService.AuthorizeAsync(User, "EditRolePolicy")).Succeeded)
+                        {
+                            <a class="btn btn-info" asp-controller="administration" asp-action="editrole" asp-route-id="@role.Id">Edit</a>
+                        }
+                        @if ((await authorizationService.AuthorizeAsync(User, "DeleteRolePolicy")).Succeeded)
+                        {
+                            <span id="deleteSpan_@role.Id">
+                                <a href="#" class="btn btn-danger" onclick="ConfirmDelete('@role.Id',true)">Delete</a>
+                            </span>
+                        }
 
 
                         <span id="confirmSpan_@role.Id" style="display:none">
@@ -36,21 +39,21 @@
                             <a href="#" class="btn btn-primary" onclick="ConfirmDelete('@role.Id',false)">No</a>
                         </span>
                     </form>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="card mb-2">
+            <div class="card-header"><h5>No Roles Yet</h5></div>
+            <div class="card-body"><h3>Add Role From Below</h3></div>
+            <div class="card-footer">
+                <a class="btn btn-primary" asp-controller="administration" asp-action="createrole">Create New Role</a>
             </div>
         </div>
     }
-}
-else
-{
-    <div class="card mb-2">
-        <div class="card-header"><h5>No Roles Yet</h5></div>
-        <div class="card-body"><h3>Add Role From Below</h3></div>
-        <div class="card-footer">
-            <a class="btn btn-primary" asp-controller="administration" asp-action="createrole">Create New Role</a>
-        </div>
-    </div>
-}
 
-@section Scripts{
-    <script src="~/confirmDelete.js"></script>
-}
+    @section Scripts{
+        <script src="~/confirmDelete.js"></script>
+    }
