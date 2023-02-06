@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EmployeeManagement.Controllers
@@ -17,7 +18,8 @@ namespace EmployeeManagement.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public AdministrationController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        public AdministrationController(RoleManager<IdentityRole> roleManager,
+            UserManager<ApplicationUser> userManager)
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
@@ -300,6 +302,62 @@ namespace EmployeeManagement.Controllers
             }
 
             return RedirectToAction("EditUser", "Administration", new { id = id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ManageClaims(string id)
+        {
+
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                ViewBag.Error = $"Can't find user with Id = {id}";
+                return View("NotFound");
+            }
+
+            var userClaims = await userManager.GetClaimsAsync(user);
+            var allClaims = ClaimsStore.AllClaims;
+            var model = new ManageClaimsViewModel() { UserId = user.Id };
+
+            foreach (var claim in allClaims)
+            {
+                model.Claims.Add(new UserClaim
+                {
+                    ClaimType = claim.Type,
+                    IsSelected = userClaims.Select(x => x.Type).Contains(claim.Type)
+                });
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ManageClaims(ManageClaimsViewModel model)
+        {
+            var user = await userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+            {
+                ViewBag.Error = $"Can't find user with Id = {model.UserId}";
+                return View("NotFound");
+            }
+
+            var userClaims = await userManager.GetClaimsAsync(user);
+            var result = await userManager.RemoveClaimsAsync(user, userClaims);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Can't remove user Claims");
+                return View(model);
+            }
+
+            result = await userManager.AddClaimsAsync(user, model.Claims.Where(x => x.IsSelected).Select(x => new Claim(x.ClaimType, x.ClaimType)));
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Can't add claims to user");
+                return View(model);
+            }
+
+            return RedirectToAction("EditUser", "Administration", new { id = model.UserId });
         }
     }
 }
