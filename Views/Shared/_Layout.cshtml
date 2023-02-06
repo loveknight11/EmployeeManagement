@@ -26,7 +26,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
     </environment>
-    
+
     <title>@ViewBag.Title</title>
 </head>
 <body>
@@ -52,15 +52,15 @@
                     </li>
                     @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
-                <li class="nav-item dropdown">
-                    <a class="dropdown-toggle nav-link" href="#" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        Manage
-                    </a>
-                    <ul class="dropdown-menu text-center"  aria-labelledby="dropdownMenuButton1">
-                        <li><a asp-action="listroles" asp-controller="administration" class="dropdown-item">Roles</a></li>
-                        <li><a asp-action="listusers" asp-controller="administration" class="dropdown-item">Users</a></li>
-                    </ul>
-                </li>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle nav-link" href="#" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                Manage
+                            </a>
+                            <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton1">
+                                <li><a asp-action="listroles" asp-controller="administration" class="dropdown-item">Roles</a></li>
+                                <li><a asp-action="listusers" asp-controller="administration" class="dropdown-item">Users</a></li>
+                            </ul>
+                        </li>
                     }
                 </ul>
             </div>
