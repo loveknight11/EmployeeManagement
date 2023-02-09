@@ -4,31 +4,53 @@
     ViewBag.Title = "User Login";
 }
 
+
 <div class="row">
-    <form method="post">
+    <div class="col-6">
+        <h1>Local Login</h1>
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
 
-        <div asp-validation-summary="All" class="text-danger"></div>
-
-        <div class="form-floating mb-3 mt-3">
-            <input asp-for="Email" class="form-control" placeholder="Enter email">
-            <label asp-for="Email"></label>
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-
-        <div class="form-floating mb-3 mt-3">
-            <input asp-for="Password" class="form-control" placeholder="Enter email">
-            <label asp-for="Password"></label>
-            <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
-
-        <div class="input-group mb-3">
-            <div class="input-group-text">
-                <input type="checkbox" asp-for="RememberMe">
-                <label asp-for="RememberMe" >@Html.DisplayNameFor(o => o.RememberMe)</label>
-                </input>
+            <div class="form-floating mb-3 mt-3">
+                <input asp-for="Email" class="form-control" placeholder="Enter email">
+                <label asp-for="Email"></label>
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-        </div>
-        <button class="btn btn-primary">Register</button>
-    </form>
+
+            <div class="form-floating mb-3 mt-3">
+                <input asp-for="Password" class="form-control" placeholder="Enter email">
+                <label asp-for="Password"></label>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-text">
+                    <input type="checkbox" asp-for="RememberMe">
+                    <label asp-for="RememberMe">@Html.DisplayNameFor(o => o.RememberMe)</label>
+                    </input>
+                </div>
+            </div>
+            <button class="btn btn-primary">Register</button>
+        </form>
+    </div>
+    <div class="col-6">
+        <h1>External Logins</h1>
+        @if (Model.ExternalLogins.Any())
+        {
+            <form asp-action="ExternalLogin" asp-controller="Account" asp-route-returnurl="@Model.ReturnUrl" method="post">
+                @foreach (var provider in Model.ExternalLogins)
+                {
+                    <button class="btn btn-primary" type="submit" title="Login using @provider.Name account"
+                            name="provider" value="@provider.Name">
+                        @provider.DisplayName
+                    </button>
+                }
+            </form>
+        }
+        else
+        {
+            <h2>No External Login providers available</h2>
+        }
+    </div>
 </div>
 
