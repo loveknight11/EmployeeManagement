@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EmployeeManagement.Controllers
@@ -82,14 +83,68 @@ namespace EmployeeManagement.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> ExternalLogin(string provider, string returnUrl)
+        public IActionResult ExternalLogin(string provider, string returnUrl)
         {
             var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { returnUrl = returnUrl });
             var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return new ChallengeResult(provider, properties);
         }
 
-            [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            if (returnUrl == null)
+            {
+                returnUrl = Url.Content("~/");
+            }
+
+            LoginViewModel model = new LoginViewModel { 
+            ReturnUrl = returnUrl,
+            ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+
+            if (remoteError != null)
+            {
+                ModelState.AddModelError("", $"Error from External Login : {remoteError}");
+                return View("Login", model);
+            }
+
+            var info = await signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                ModelState.AddModelError("","Error loading external login info");
+                return View("Login", model);
+            }
+
+            var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
+            if (signInResult.Succeeded)
+            {
+                return LocalRedirect(returnUrl);
+            }
+
+            var email = info.Principal.FindFirst(ClaimTypes.Email).Value;
+            if (email == null)
+            {
+                ModelState.AddModelError("", "Error getting Email from external login");
+                return View("Login", model);
+            }
+
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                user = new ApplicationUser { 
+                    Email = email,
+                    UserName = email
+                };
+                await userManager.CreateAsync(user);
+            }
+
+            await userManager.AddLoginAsync(user, info);
+            await signInManager.SignInAsync(user, false);
+            return LocalRedirect(returnUrl);
+        }
+
+        [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
