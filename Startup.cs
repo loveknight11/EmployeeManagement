@@ -44,9 +44,15 @@ namespace EmployeeManagement
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 4;
             }).AddEntityFrameworkStores<AppDbContext>();
-            services.AddAuthentication().AddGoogle(options => {
+            services.AddAuthentication()
+                .AddGoogle(options => {
                 options.ClientId = "34307980187-3fffkj2rj6uhnu3d1udf9m4kec03ntv7.apps.googleusercontent.com";
                 options.ClientSecret = "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";
+            }).AddFacebook(options =>
+            {
+                options.AppId = "689689319504707";
+                options.AppSecret = "b5105f9f4c99d1f32e03f3ac4812ea55";
+                //options.CallbackPath = "https://localhost:44346/signin-facebook";
             });
             services.AddAuthorization(o => {
                 o.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
