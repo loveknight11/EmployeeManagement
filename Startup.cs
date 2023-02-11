@@ -46,12 +46,12 @@ namespace EmployeeManagement
             }).AddEntityFrameworkStores<AppDbContext>();
             services.AddAuthentication()
                 .AddGoogle(options => {
-                options.ClientId = "34307980187-3fffkj2rj6uhnu3d1udf9m4kec03ntv7.apps.googleusercontent.com";
-                options.ClientSecret = "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";
+                options.ClientId = _config["Google:ClientId"];
+                options.ClientSecret = _config["Google:ClientSecret"];
             }).AddFacebook(options =>
             {
-                options.AppId = "689689319504707";
-                options.AppSecret = "b5105f9f4c99d1f32e03f3ac4812ea55";
+                options.AppId = _config["Facebook:AppId"];
+                options.AppSecret = _config["Facebook:AppSecret"];
                 //options.CallbackPath = "https://localhost:44346/signin-facebook";
             });
             services.AddAuthorization(o => {
