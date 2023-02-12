@@ -45,8 +45,11 @@ namespace EmployeeManagement.Controllers
                 var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await signInManager.SignInAsync(user, false);
-                    return RedirectToAction("index", "home");
+                    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var url = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = token },Request.Scheme);
+                    ViewBag.Error = "Confirm Email";
+                    ViewBag.Path = url;
+                    return View("NotFound");
                 }
                 else
                 {
@@ -59,6 +62,35 @@ namespace EmployeeManagement.Controllers
 
             }
             return View(model);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (userId == null || token == null)
+            {
+                ViewBag.Error = "Can't confirm Email";
+                return View("NotFound");
+            }
+
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                ViewBag.Error = "Can't confirm Email";
+                return View("NotFound");
+            }
+
+            var result = await userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return View();
+            }
+            else
+            {
+                ViewBag.Error = "Can't confirm Email";
+                return View("NotFound");
+            }
         }
 
         [HttpPost]

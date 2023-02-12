@@ -44,7 +44,9 @@ namespace EmployeeManagement
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 4;
                 options.SignIn.RequireConfirmedEmail = true;
-            }).AddEntityFrameworkStores<AppDbContext>();
+            })
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
             services.AddAuthentication()
                 .AddGoogle(options => {
                 options.ClientId = _config["Google:ClientId"];
