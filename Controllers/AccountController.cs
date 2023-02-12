@@ -115,6 +115,29 @@ namespace EmployeeManagement.Controllers
                 ModelState.AddModelError("","Error loading external login info");
                 return View("Login", model);
             }
+            
+            var email = info.Principal.FindFirst(ClaimTypes.Email).Value;
+            if (email == null)
+            {
+                ModelState.AddModelError("", "Error getting Email from external login");
+                return View("Login", model);
+            }
+            
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                user = new ApplicationUser
+                {
+                    Email = email,
+                    UserName = email
+                };
+                await userManager.CreateAsync(user);
+            }
+            if (user != null && !user.EmailConfirmed)
+            {
+                ModelState.AddModelError("", "Email not confirmed yet.");
+                return View("Login", model);
+            }
 
             var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
             if (signInResult.Succeeded)
@@ -122,22 +145,7 @@ namespace EmployeeManagement.Controllers
                 return LocalRedirect(returnUrl);
             }
 
-            var email = info.Principal.FindFirst(ClaimTypes.Email).Value;
-            if (email == null)
-            {
-                ModelState.AddModelError("", "Error getting Email from external login");
-                return View("Login", model);
-            }
-
-            var user = await userManager.FindByEmailAsync(email);
-            if (user == null)
-            {
-                user = new ApplicationUser { 
-                    Email = email,
-                    UserName = email
-                };
-                await userManager.CreateAsync(user);
-            }
+            
 
             await userManager.AddLoginAsync(user, info);
             await signInManager.SignInAsync(user, false);
