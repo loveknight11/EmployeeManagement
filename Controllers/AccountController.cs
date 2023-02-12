@@ -150,6 +150,13 @@ namespace EmployeeManagement.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                var user = await userManager.FindByEmailAsync(model.Email);
+                if (user != null && !user.EmailConfirmed && await userManager.CheckPasswordAsync(user,model.Password))
+                {
+                    ModelState.AddModelError("", "Email not confirmed yet.");
+                    return View(model);
+                }
                 var result = await signInManager.PasswordSignInAsync(model.Email, model.Password,
                     model.RememberMe, false);
                 if (result.Succeeded)
