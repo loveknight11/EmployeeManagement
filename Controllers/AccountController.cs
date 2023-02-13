@@ -164,6 +164,13 @@ namespace EmployeeManagement.Controllers
                     UserName = email
                 };
                 await userManager.CreateAsync(user);
+
+
+                var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                var url = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = token }, Request.Scheme);
+                ViewBag.Error = "Confirm Email";
+                ViewBag.Path = url;
+                return View("NotFound");
             }
             if (user != null && !user.EmailConfirmed)
             {
